@@ -1,0 +1,15 @@
+{
+  "name": "pi-openai-compat-providers",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Manage named OpenAI-compatible endpoints and discover their models in Pi.",
+  "keywords": ["pi-package"],
+  "scripts": { "test": "node --test tests/openai-compatible.test.mjs" },
+  "pi": { "extensions": ["./src/index.ts"] },
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  }
+}
