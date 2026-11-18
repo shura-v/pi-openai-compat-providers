@@ -1,11 +1,23 @@
 {
   "name": "pi-openai-compat-providers",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "description": "Manage named OpenAI-compatible endpoints and discover their models in Pi.",
   "keywords": ["pi-package"],
-  "scripts": { "test": "node --test tests/openai-compatible.test.mjs" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shura-v/pi-openai-compat-providers.git"
+  },
+  "files": ["src"],
+  "scripts": {
+    "test": "node --test tests/openai-compatible.test.mjs",
+    "changeset": "changeset",
+    "version-packages": "changeset version && npm install --package-lock-only --ignore-scripts",
+    "release": "changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^3.0.3"
+  },
   "pi": { "extensions": ["./src/index.ts"] },
   "peerDependencies": {
     "@earendil-works/pi-ai": "*",

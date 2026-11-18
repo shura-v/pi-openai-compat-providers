@@ -1,6 +1,6 @@
 # pi-openai-compat-providers
 
-Manage named OpenAI-compatible endpoints in Pi. Each provider uses its own base URL and optional API key for both model discovery and chat.
+Manage named endpoints that implement the **OpenAI Chat Completions API** in Pi. Each server must support `GET <baseUrl>/models` for discovery and `POST <baseUrl>/chat/completions` for chat. Pi also supports the Responses API, but this extension does not call `/responses` or the legacy text `/completions` endpoint.
 
 ## Use
 
@@ -25,4 +25,13 @@ A fresh installation starts empty. Existing `openai-compatible.json` settings ar
 
 ## Test
 
-With Node 24+ and the Pi peer dependencies installed, run `npm test`. The integration test uses a temporary settings directory and a loopback HTTP server.
+Use Node 24, run `npm ci`, then `npm test`. The integration test uses a temporary settings directory and a loopback HTTP server.
+
+## Releases
+
+The first merge of the release workflow into `main` publishes the existing `0.1.0` version if it is not on npm yet. No initial changeset or manual version bump is needed. **Before merging**:
+
+1. In GitHub → Settings → Actions → General, enable **Allow GitHub Actions to create and approve pull requests**.
+2. For the first publish, add an Actions secret named `NPM_TOKEN` with a short-lived npm granular token that can create this unscoped package and publish without an interactive 2FA prompt. After the first release, configure an npm trusted publisher for `shura-v/pi-openai-compat-providers`, workflow `publish.yml`, with publish permission; remove the bootstrap secret and revoke the token.
+
+For subsequent user-facing changes, run `npm run changeset` in the feature branch and include the generated file in the PR. After merge, Changesets opens a release PR with the version and changelog. Merging that PR runs the tests and publishes to npm, then creates the Git tag and GitHub Release. Once published, install with `pi install npm:pi-openai-compat-providers`.

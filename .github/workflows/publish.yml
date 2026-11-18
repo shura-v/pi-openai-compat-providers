@@ -1,0 +1,38 @@
+name: Publish
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: publish-main
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - name: Create release PR or publish to npm
+        uses: changesets/action@v2
+        with:
+          version-script: npm run version-packages
+          publish-script: npm run release
+          pr-title: 'chore: version packages'
+          commit-message: 'chore: version packages'
+        env:
+          # Bootstrap the package once; subsequent releases can use npm trusted publishing.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
